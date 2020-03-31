@@ -1,4 +1,5 @@
-use std::num::Wrapping;
+#![no_std]
+use core::num::Wrapping;
 
 pub struct Arc4<'a> {
     key: &'a [u8],

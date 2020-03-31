@@ -4,6 +4,11 @@ version = "0.1.0"
 authors = ["Cody P Schafer <dev@codyps.com>"]
 edition = "2018"
 license = "Apache-2.0 OR MIT"
+documentation = "https://docs.rs/arc4/"
+repository = "https://github.com/jmesmon/arc4"
+description = "RC4 encryption and PRNG in pure rust (with no_std support)"
+keywords = ["RC4", "arc4", "encryption", "random"]
+categories = ["cryptography", "no-std"]
 
 [dependencies]
 
