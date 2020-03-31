@@ -1,6 +1,6 @@
 use std::num::Wrapping;
 
-pub struct Context<'a> {
+pub struct Arc4<'a> {
     key: &'a [u8],
     state: [u8; 256], 
 
@@ -8,9 +8,9 @@ pub struct Context<'a> {
     j: u8,
 }
 
-impl<'a> Context<'a> {
+impl<'a> Arc4<'a> {
     pub fn with_key(key: &'a [u8]) -> Self {
-        let mut s = Context {
+        let mut s = Self {
             key: key,
             state: [0;256],
             i: 0,
@@ -24,7 +24,7 @@ impl<'a> Context<'a> {
     pub fn prga(&mut self, out: &mut [u8]) {
         let mut i = Wrapping(self.i);
         let mut j = Wrapping(self.j);
-        for z in 0 .. self.key.len() {
+        for z in 0 .. out.len() {
             i = i + Wrapping(1);
             j = j + Wrapping(self.state[i.0 as usize]);
             self.state.swap(i.0 as usize, j.0 as usize);
@@ -38,7 +38,7 @@ impl<'a> Context<'a> {
     pub fn encrypt(&mut self, data: &mut [u8]) {
         let mut i = Wrapping(self.i);
         let mut j = Wrapping(self.j);
-        for z in 0 .. self.key.len() {
+        for z in 0 .. data.len() {
             i = i + Wrapping(1);
             j = j + Wrapping(self.state[i.0 as usize]);
             self.state.swap(i.0 as usize, j.0 as usize);
@@ -57,7 +57,7 @@ fn ksa(s: &mut [u8], key: &[u8]) {
 
     let mut j = 0;
     for i in 0 ..= 255 {
-        j = (j + s[i] + key[i % key.len()]) as u8;
+        j = (Wrapping(j) + Wrapping(s[i]) + Wrapping(key[i % key.len()])).0;
         s.swap(i, j as usize);
     }
 }
